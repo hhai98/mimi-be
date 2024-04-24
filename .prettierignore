@@ -1,0 +1,10 @@
+node_modules
+coverage
+.vscode
+.DS_Store
+dist
+dist-ssr
+build
+*.local
+node_modules/*
+/src/modules/sockets/utils/dictionary.ts

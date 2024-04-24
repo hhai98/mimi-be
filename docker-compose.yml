@@ -1,0 +1,39 @@
+version: "3.3"
+
+services:
+  # Rename service
+  mimi_be:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Rename container_name
+    container_name: mimi_be_container
+    # Rename image
+    image: mimi_be_image
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:13
+    # Rename container
+    container_name: mimi_db_container
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: $DATABASE_PASSWORD
+      POSTGRES_USER: $DATABASE_USERNAME
+      POSTGRES_DB: $DATABASE_NAME
+    ports:
+      - "${DATABASE_PORT}:5432"
+    volumes:
+      # Rename volume
+      - mimi_db_volumes:/var/lib/postgresql/data
+
+volumes:
+  mimi_db_volumes:

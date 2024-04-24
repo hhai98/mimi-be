@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>Thank You for Your Purchase</title>
+  </head>
+  <body>
+    <p>
+      Xin chào {{user.firstName}} {{user.lastName}}
+    </p>
+    <p>
+      Cảm ơn bạn đã mua các khóa học sau:
+    </p>
+    <ul>
+      {{#each courses}}
+        <li>
+          <p>
+            {{this.title}}: {{this.price}} VNĐ
+          </p>
+          <p>Liên kết: {{../frontendDomain}}/courses/{{this.courseId}}</p>
+        </li>
+      {{/each}}
+    </ul>
+  </body>
+</html>

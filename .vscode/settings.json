@@ -1,0 +1,24 @@
+{
+  "files.autoSave": "onFocusChange",
+  "editor.formatOnSave": false,
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "prettier.useTabs": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "prettier.semi": false,
+  "editor.suggestSelection": "first",
+  "cSpell.language": "en",
+  "explorer.confirmDelete": false,
+  "git.enableSmartCommit": true,
+  "editor.tabSize": 2,
+  "prettier.singleQuote": true,
+  "prettier.jsxSingleQuote": true,
+  "prettier.enable": true,
+  "autoimport.useSemiColon": false,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "cSpell.words": [
+    "middlewares",
+    "typeorm"
+  ],
+  "explorer.compactFolders": false,
+}

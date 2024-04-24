@@ -1,0 +1,106 @@
+name: Mimi-Deployment
+
+on:
+  push:
+    branches:
+      - production
+
+concurrency:
+  group: ${{ github.workflow }}
+
+jobs:
+  # install-dependencies:
+  #   name: Install Dependencies
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #     - name: Install Dependencies
+  #       run: yarn install
+
+  # lint:
+  #   name: Lint
+  #   runs-on: ubuntu-latest
+  #   needs: install-dependencies
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #     - name: Lint code
+  #       run: yarn lint
+
+  build:
+    name: Build
+    # needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: yarn install
+      - name: Build
+        run: |
+          yarn build
+        # run: |
+        #   yarn build
+        #   docker build -t mimi_backend:v1 .
+        #   docker save -o mimi_backend-${{ github.run_id }}.tar mimi_backend:v1
+        #   zip mimi_backend-${{ github.run_id }}.zip mimi_backend-${{ github.run_id }}.tar
+
+  # copy:
+  #   name: Copy File
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #     - name: Copy file via SSH password
+  #       uses: appleboy/scp-action@v0.1.4
+  #       with:
+  #         host: ${{ secrets.VM_HOST }}
+  #         port: ${{ secrets.VM_PORT }}
+  #         username: ${{ secrets.VM_USERNAME }}
+  #         password: ${{ secrets.VM_PASSWORD }}
+  #         source: "docker-compose.yml,mimi_backend-${{ github.run_id }}.zip,mimi_backend-${{ github.run_id }}.tar,.env.production"
+  #         target: /home/mimi-backend
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: SSH into VM and Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VM_HOST }}
+          port: ${{ secrets.VM_PORT }}
+          username: ${{ secrets.VM_USERNAME }}
+          password: ${{ secrets.VM_PASSWORD }}
+          script: |
+            cd /home/mimi-backend
+            git checkout production
+            git pull
+            cp .env.production .env
+            yarn dc:prod
+            docker system prune -a -f
+            exit
+
+  # cleanup:
+  #   name: Cleanup
+  #   needs: deploy
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #     - name: SSH into VM and Cleanup
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.VM_HOST }}
+  #         port: ${{ secrets.VM_PORT }}
+  #         username: ${{ secrets.VM_USERNAME }}
+  #         password: ${{ secrets.VM_PASSWORD }}
+  #         script: |
+  #           cd /home/mimi-backend
+  #           docker system prune -a -f
+  #           exit

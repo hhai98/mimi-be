@@ -1,0 +1,9 @@
+/dist
+/src-capacitor
+/src-cordova
+/node_modules
+.eslintrc.js
+/src-ssr
+/.vscode
+/.husky
+/src/modules/sockets/utils/dictionary.ts

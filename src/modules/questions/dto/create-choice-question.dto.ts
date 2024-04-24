@@ -1,0 +1,35 @@
+import { ApiProperty } from '@nestjs/swagger'
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator'
+
+export class CreateChoiceQuestionDto {
+  @ApiProperty({ example: 'Question' })
+  @IsNotEmpty()
+  @IsString()
+  question: string
+
+  @ApiProperty({ example: ['Option 1', 'Option 2', 'Option 3'] })
+  @IsArray()
+  @ArrayMinSize(2, { message: 'You must provide at least two options.' })
+  @ArrayMaxSize(6, { message: 'You can provide up to six options.' })
+  @IsString({ each: true })
+  answers: string[]
+
+  @ApiProperty({ example: [0, 2] })
+  @IsArray()
+  @IsInt({ each: true })
+  correctAnswers: number[]
+
+  @ApiProperty({ example: 'Answer explanation' })
+  @IsNotEmpty()
+  @IsString()
+  @IsOptional()
+  answerExplain: string
+}
